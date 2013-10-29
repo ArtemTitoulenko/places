@@ -1,0 +1,15 @@
+package placedata;
+
+option java_package = "PlaceData";
+option java_outer_classname = "PlaceDataProto";
+
+message Place {
+	required string state = 1;
+	required string name = 2;
+	required double lat = 3;
+	required double lon = 4;
+}
+
+message PlaceList {
+	repeated Place place = 1;
+}

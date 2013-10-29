@@ -1,0 +1,16 @@
+package airportdata;
+
+option java_package = "AirportData";
+option java_outer_classname = "AirportDataProto";
+
+message Airport {
+	required string state = 1;
+	required string name = 2;
+	required string code = 3;
+	required double lat = 4;
+	required double lon = 5;
+}
+
+message AirportList {
+	repeated Airport airport = 1;
+}
