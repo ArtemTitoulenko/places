@@ -36,11 +36,11 @@ func printUsage() {
 }
 
 // load the list of airports before main() runs
-func init() {
+func loadAirports(file string) {
 	fmt.Println("Loading proto data file")
-	var ret, err = getAirportList(airportDataFilename)
+	var ret, err = getAirportList(file)
 	if err != nil {
-		log.Fatalf("Unable to load the proto data file %s", airportDataFilename)
+		log.Fatalf("Unable to load the proto data file %s", file)
 	}
 	airportList = ret.GetAirport()
 }
@@ -48,15 +48,19 @@ func init() {
 func main() {
 	var port int
 	var help bool
+	var airportDataFileLocation string
 	flag.IntVar(&port, "p", 1082, "The port on which to listen for connections")
 	flag.IntVar(&port, "port", 1082, "The port on which to listen for connections")
 	flag.BoolVar(&help, "help", false, "Print usage information")
+	flag.StringVar(&airportDataFileLocation, "airport-data", airportDataFilename, "Which airport location file to use")
 	flag.Parse()
 
 	if help {
 		printUsage()
 		return
 	}
+
+	loadAirports(airportDataFileLocation)
 
 	fmt.Printf("Listening on port: %d\n", port)
 

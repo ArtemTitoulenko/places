@@ -30,9 +30,10 @@ You can check what options are available by passing the `--help` flag. You shoul
 	Usage:
 		place-server [-p port]
 	Defaults:
-	  -help=false: Print usage information
-	  -p=1080: The port on which to listen for connections
-	  -port=1080: The port on which to listen for connections
+		-help=false: Print usage information
+		-p=1080: The port on which to listen for connections
+		-place-data="./placedata/places-proto.bin": Which places file to use
+		-port=1080: The port on which to listen for connections
 
 ## Running the AirportServer
 
@@ -50,6 +51,7 @@ You can check what options are available by passing the `--help` flag. You shoul
 	Usage:
 		airport-server [-p port]
 	Defaults:
+	  -airport-data="./airportdata/airports-proto.bin": Which airport location file to use
 	  -help=false: Print usage information
 	  -p=1082: The port on which to listen for connections
 	  -port=1082: The port on which to listen for connections
@@ -87,12 +89,26 @@ An example run may look like:
 	Connecting to PlaceServer at localhost:1080
 	Connecting to AirportServer at localhost:1082
 	
-	DHN: Dothan, AL distance: 38.27 miles
-	OZR: Fort Rucker, AL distance: 62.94 miles
-	TOI: Troy, AL distance: 92.25 miles
-	MAI: Marianna, FL distance: 93.27 miles
-	LSF: Fort Benning, GA distance: 101.45 miles
+	DHN: Dothan, AL distance: 20.65 miles
+	OZR: Fort Rucker, AL distance: 33.96 miles
+	TOI: Troy, AL distance: 49.78 miles
+	MAI: Marianna, FL distance: 50.33 miles
+	LSF: Fort Benning, GA distance: 54.74 miles
 
 ## Bugs and Discrepancies
 
-Distances calculated by the airport server and conversely the client application are off by
+There don't seem to be any bugs except small discrepancies between the distances computed using the given greater circle distance computation formula and the results obtained from Wolfram Alpha. These may be attributed to a loss of precision between the given dataset and the one used by Wolfram Alpha.
+
+# Data Storage and Search
+
+## PlaceServer
+
+The place server stores all of the places in a large slice of type `[]*Place`. Retrieval of a place is done in linear time. No attemptes are made to clean input and find place names that may be a close match.
+
+## AirportServer
+
+The airport server stores all of the airports in a large slice of type `[]*Airport`. Retrieval of airports comprises of using a large `[]float64` slice to hold a list of distances to airports in increasing order, and a map of type `map[float64]*Airport` which maps a distance to an airport to an airport. This is a brute-force method that is most likely very inefficient but might be Good Enough™ for the given load.
+
+## Overcoming the Brute-force Inefficiency
+
+Because the client application allows the user to specify not only the port but also a host for each server, a load balancer could be placed in front of a pool of either server type and requests could be sent to the pool either randomly or round-robin.

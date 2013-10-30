@@ -29,12 +29,12 @@ func printUsage() {
 	flag.PrintDefaults()
 }
 
-// load the list of places into placeList before main() runs
-func init() {
+// load the list of places into placeList
+func loadPlaces(file string) {
 	fmt.Println("Loading proto data file")
-	var ret, err = getPlaceList(placeDataFilename)
+	var ret, err = getPlaceList(file)
 	if err != nil {
-		log.Fatalf("Unable to load the proto data file %s", placeDataFilename)
+		log.Fatalf("Unable to load the proto data file %s", file)
 	}
 	placeList = ret.GetPlace()
 }
@@ -42,15 +42,19 @@ func init() {
 func main() {
 	var port int
 	var help bool
+	var placeDataFileLocation string
 	flag.IntVar(&port, "p", 1080, "The port on which to listen for connections")
 	flag.IntVar(&port, "port", 1080, "The port on which to listen for connections")
 	flag.BoolVar(&help, "help", false, "Print usage information")
+	flag.StringVar(&placeDataFileLocation, "place-data", placeDataFilename, "Which places file to use")
 	flag.Parse()
 
 	if help {
 		printUsage()
 		return
 	}
+
+	loadPlaces(placeDataFileLocation)
 
 	fmt.Printf("Listening on port: %d\n", port)
 
