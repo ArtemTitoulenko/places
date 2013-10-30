@@ -95,7 +95,7 @@ func main() {
 			airport.GetName(),
 			airport.GetState())
 
-		var distance = calculateDistance(place.GetLat(), place.GetLon(), airport.GetLat(), airport.GetLon())
+		var distance = calculateGreaterCircleDistance(place.GetLat(), place.GetLon(), airport.GetLat(), airport.GetLon())
 		if kilometers {
 			fmt.Printf("distance: %.2f km\n", distance*1.85200)
 		} else {
@@ -140,17 +140,9 @@ func getNearestAirports(airportServer *rpc.Client, query *AirportQuery) (*airpor
 	return airportList, nil
 }
 
-// haversine formula for getting greater-circle distance between two points over the earth's surface
-func calculateDistance(lat1, lon1, lat2, lon2 float64) float64 {
-	var dLat = (lat2 - lat1) * DegToRad
-	var dLon = (lon2 - lon1) * DegToRad
-	lat1 = lat1 * DegToRad
-	lat2 = lat2 * DegToRad
-
-	var a = math.Sin(dLat/2)*math.Sin(dLat/2) +
-		math.Sin(dLon/2)*math.Sin(dLon/2)*math.Cos(lat1)*math.Cos(lat2)
-	var c = 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
-	var d = R * c
-
-	return d
+// calculate the greater circle distance between two coordinates
+func calculateGreaterCircleDistance(lat1, lon1, lat2, lon2 float64) float64 {
+	var a = math.Sin(lat1*DegToRad) * math.Sin(lat2*DegToRad)
+	var b = math.Cos(lat1*DegToRad) * math.Cos(lat2*DegToRad) * math.Cos(lon2*DegToRad-lon1*DegToRad)
+	return 60.0 * math.Acos(a+b) * RadToDeg
 }
