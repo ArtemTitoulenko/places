@@ -1,6 +1,6 @@
-Artem Titoulenko  
-CS 417: Distributed Systems  
-Homework 5  
+Artem Titoulenko
+CS 417: Distributed Systems
+Homework 5
 
 # Distributed Airport Locator Service
 
@@ -70,7 +70,7 @@ or you may compile the program and run it like so:
 	$ ./Client
 
 You can check what options are available by passing the `--help` flag. You should see something like:
-	
+
 	Usage:
 		client [--place-host host] [--place-port port] [--airport-host host] [--airport-port port] [--help] [--kilometers] city state
 	Defaults:
@@ -83,14 +83,14 @@ You can check what options are available by passing the `--help` flag. You shoul
 
 ### Usage
 
-The Client application takes a city and a state as parameters and returns the five nearest airports, ordered by distancce. The units of measure default to miles but can be displayed in kilometers by passing the `--kilometers` flag. City names must be exact, and state's are denoted by their two-letter abbreviations.
+The Client application takes a city and a state as parameters and returns the five nearest airports, ordered by distance. The units of measure default to miles but can be displayed in kilometers by passing the `--kilometers` flag. City names must be exact, and state's are denoted by their two-letter abbreviations.
 
 An example run may look like:
 
 	$ go run client.go "Abbeville city" AL
 	Connecting to PlaceServer at localhost:1080
 	Connecting to AirportServer at localhost:1082
-	
+
 	DHN: Dothan, AL distance: 20.65 miles
 	OZR: Fort Rucker, AL distance: 33.96 miles
 	TOI: Troy, AL distance: 49.78 miles
@@ -105,7 +105,7 @@ There don't seem to be any bugs except small discrepancies between the distances
 
 ## PlaceServer
 
-The place server stores all of the places in a large slice of type `[]*Place`. Retrieval of a place is done in linear time. No attemptes are made to clean input and find place names that may be a close match.
+The place server stores all of the places in a large slice of type `[]*Place`. Retrieval of a place is done in linear time. No attempts are made to clean input and find place names that may be a close match.
 
 ## AirportServer
 
