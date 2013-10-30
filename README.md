@@ -6,13 +6,15 @@ Homework 5
 
 This collection of servers and a client allows a user to find the five nearest airports to a place. There is a list of places that is not updated and will not be updated.
 
-## Installation
+## Installation and Setup
 
 In either `AirportServer` or `PlaceServer`, run:
 
 	$ go get
 
 This should install the `code.google.com/p/goprotobuf/proto` package which is obviously a protobuffer package for Go.
+
+The binary files containing all of the airports and places may not come with the package. They can be installed anywhere and can be pointed at by using the `-airport-data=` and `-place-data=` flags for the AirportServer and PlaceServer respectively.
 
 ## Running the PlaceServer
 
